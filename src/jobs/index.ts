@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-import { agenda } from './jobs'
+import Agenda from 'agenda'
 
-const startJobs = async () => {
-  await agenda.start()
-  await agenda.every('5 seconds', 'printer')
+const mongoUrl = 'mongodb://localhost:27017/agenda'
+
+export const agenda = new Agenda({
+  db: {
+    address: mongoUrl
+  }
+})
+
+const printer = async (job: Agenda.Job) => {
+  console.log('Printing...')
 }
 
-startJobs().then(r => console.log('Jobs Started'))
+agenda.define('printer', printer)
