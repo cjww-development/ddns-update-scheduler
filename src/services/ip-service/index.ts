@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import Agenda from 'agenda'
-import { getPublicIP } from '../services/ip-service'
+import axios from 'axios'
+import { logger } from '../../lib/logger'
 
-const mongoUrl = 'mongodb://localhost:27017/agenda'
-
-export const agenda = new Agenda({ db: { address: mongoUrl }})
-
-const printer = async (job: Agenda.Job) => {
-  const publicIp = await getPublicIP()
-  console.log(publicIp)
+export const getPublicIP = (): Promise<string | null> => {
+  return axios.get('https://api.ipify.org?format=json').then(resp => {
+    logger.info('[getPublicIp] - Fetched public IP address for the current connection')
+    return resp.data.ip
+  }).catch(err => {
+    logger.error('[getPublicIp] - There was a problem getting the public IP address', err)
+    return null
+  })
 }
 
-agenda.define('printer', printer)

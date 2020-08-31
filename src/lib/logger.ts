@@ -14,16 +14,11 @@
  * limitations under the License.
  */
 
-import Agenda from 'agenda'
-import { getPublicIP } from '../services/ip-service'
+import winston from 'winston'
 
-const mongoUrl = 'mongodb://localhost:27017/agenda'
-
-export const agenda = new Agenda({ db: { address: mongoUrl }})
-
-const printer = async (job: Agenda.Job) => {
-  const publicIp = await getPublicIP()
-  console.log(publicIp)
+const consoleTransport = new winston.transports.Console()
+const winstonConfig = {
+  transports: [consoleTransport]
 }
 
-agenda.define('printer', printer)
+export const logger: winston.Logger = winston.createLogger(winstonConfig)
