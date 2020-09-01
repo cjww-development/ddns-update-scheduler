@@ -11,6 +11,7 @@
     "@types/node": "^14.6.2",
     "@types/winston": "^2.4.4",
     "jest": "^26.4.2",
+    "jest-junit": "^11.1.0",
     "nodemon": "^2.0.4",
     "ts-jest": "^26.3.0",
     "ts-node": "^9.0.0",
@@ -24,6 +25,30 @@
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/app.ts",
     "build": "tsc",
     "start": "node dist/app.js",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "test:ci": "jest --testResultsProcessor ./node_modules/jest-junit --coverage --coverageDirectory=coverage"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "**/*.{ts,tsx}",
+      "!**/node_modules/**",
+      "!**/build/**",
+      "!**/definitionfiles/**",
+      "!**/WebWrokers/**",
+      "!**/*.mock.ts",
+      "!src/setupTests.ts"
+    ],
+    "coverageReporters": [
+      "lcov",
+      "text"
+    ]
+  },
+  "jest-junit": {
+    "suiteName": "jest tests",
+    "output": "coverage/junit.xml",
+    "classNameTemplate": "{classname} - {title}",
+    "titleTemplate": "{classname} - {title}",
+    "ancestorSeparator": " > ",
+    "usePathForSuiteName": "true"
   }
 }
