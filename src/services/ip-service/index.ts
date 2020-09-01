@@ -19,7 +19,7 @@ import { logger } from '../../lib/logger'
 
 export const getPublicIP = (): Promise<string | null> => {
   return axios.get('https://api.ipify.org?format=json').then(resp => {
-    logger.info('[getPublicIp] - Fetched public IP address for the current connection')
+    logger.info(`[getPublicIp] - Fetched public IP address for the current connection, found ${resp.data.ip}`)
     return resp.data.ip
   }).catch(err => {
     logger.error('[getPublicIp] - There was a problem getting the public IP address', err)

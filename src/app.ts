@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { agenda } from './jobs'
 import dotenv from 'dotenv'
-
 dotenv.config()
+
+import { agenda } from './jobs'
 
 const startJobs = async () => {
   await agenda.start()
-  await agenda.every('5 seconds', 'printer')
+  await agenda.every('5 seconds', 'update-ddns')
 }
 
 startJobs().then(r => console.log('Jobs Started'))

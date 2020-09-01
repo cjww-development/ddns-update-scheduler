@@ -15,20 +15,24 @@
  */
 
 import Agenda from 'agenda'
-import { lookupUrl } from '../services/dns-service'
+import { lookupUrl }  from '../services/dns-service'
 import { getPublicIP } from '../services/ip-service'
+import {logger} from '../lib/logger'
 
 const mongoUrl = 'mongodb://localhost:27017/agenda'
 const serverUrl = process.env.LOOKUP_ADDR || ''
 
 export const agenda = new Agenda({ db: { address: mongoUrl }})
 
-const printer = async (job: Agenda.Job) => {
-  const publicIp = await getPublicIP()
-  console.log(publicIp)
-  lookupUrl(serverUrl, (ip: string | null) => {
-    console.log(`Looked up IP ${ip}`)
+const updateDDNSJob = async (job: Agenda.Job) => {
+  lookupUrl(serverUrl, async (ip: string | null) => {
+    const publicIp = await getPublicIP()
+    if(ip === publicIp) {
+      logger.info('[updateDDNSJob] - The public IP has not changed, aborting return')
+    } else {
+      logger.warn(`[updateDDNSJob] - There has been a change in the public IP, updating DDNS service`)
+    }
   })
 }
 
-agenda.define('printer', printer)
+agenda.define('update-ddns', updateDDNSJob)
