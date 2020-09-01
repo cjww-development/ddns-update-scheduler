@@ -15,6 +15,9 @@
  */
 
 import { agenda } from './jobs'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const startJobs = async () => {
   await agenda.start()

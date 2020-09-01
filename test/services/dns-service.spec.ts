@@ -14,21 +14,13 @@
  * limitations under the License.
  */
 
-import Agenda from 'agenda'
-import { lookupUrl } from '../services/dns-service'
-import { getPublicIP } from '../services/ip-service'
+const dns = require('dns')
+const { lookupUrl } = require('../../src/services/dns-service')
 
-const mongoUrl = 'mongodb://localhost:27017/agenda'
-const serverUrl = process.env.LOOKUP_ADDR || ''
-
-export const agenda = new Agenda({ db: { address: mongoUrl }})
-
-const printer = async (job: Agenda.Job) => {
-  const publicIp = await getPublicIP()
-  console.log(publicIp)
-  lookupUrl(serverUrl, (ip: string | null) => {
-    console.log(`Looked up IP ${ip}`)
+describe('lookupUrl', () => {
+  it('should return the IP for the url', async () => {
+    lookupUrl('test.com', (ip: string | null) => {
+      expect(ip).toEqual('69.172.200.235')
+    })
   })
-}
-
-agenda.define('printer', printer)
+})

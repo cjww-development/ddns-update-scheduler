@@ -19,7 +19,8 @@
   },
   "dependencies": {
     "agenda": "^3.1.0",
-    "axios": "^0.20.0"
+    "axios": "^0.20.0",
+    "dotenv": "^8.2.0"
   },
   "scripts": {
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/app.ts",
