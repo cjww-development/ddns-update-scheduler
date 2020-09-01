@@ -19,9 +19,11 @@ dotenv.config()
 
 import { agenda } from './jobs'
 
+const jobFrequency: string = process.env.JOB_FREQUENCY || '1 hour'
+
 const startJobs = async () => {
   await agenda.start()
-  await agenda.every('5 seconds', 'update-ddns')
+  await agenda.every(jobFrequency, 'update-ddns')
 }
 
 startJobs().then(r => console.log('Jobs Started'))

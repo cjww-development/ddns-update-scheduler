@@ -15,7 +15,7 @@
  */
 
 import Agenda from 'agenda'
-import { lookupUrl }  from '../services/dns-service'
+import { lookupUrl, updateDDNS }  from '../services/dns-service'
 import { getPublicIP } from '../services/ip-service'
 import {logger} from '../lib/logger'
 
@@ -31,6 +31,7 @@ const updateDDNSJob = async (job: Agenda.Job) => {
       logger.info('[updateDDNSJob] - The public IP has not changed, aborting return')
     } else {
       logger.warn(`[updateDDNSJob] - There has been a change in the public IP, updating DDNS service`)
+      ip !== null || publicIp !== null ? await updateDDNS(`${publicIp}`) : logger.warn('[updateDDNSJob] - One of the IP addresses was null aborting run')
     }
   })
 }
