@@ -19,7 +19,7 @@ import { lookupUrl, updateDDNS }  from '../services/dns-service'
 import { getPublicIP } from '../services/ip-service'
 import {logger} from '../lib/logger'
 
-const mongoUrl = 'mongodb://localhost:27017/agenda'
+const mongoUrl = process.env.MONGO_URL || ''
 const serverUrl = process.env.LOOKUP_ADDR || ''
 
 export const agenda = new Agenda({ db: { address: mongoUrl }})

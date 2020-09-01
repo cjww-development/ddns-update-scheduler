@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: ddns-mongo.local
+    hostname: ddns-mongo.local
+    networks:
+      - ddns-net
+
+  ddns-update-scheduler:
+    image: cjww-development/ddns-update-scheduler
+    container_name: ddns-update-scheduler.local
+    hostname: ddns-update-scheduler.local
+    environment:
+      LOOKUP_ADDR: '<SERVER>'
+      DDNS_USER: '<DDNS_USER>'
+      DDNS_PASS: '<DDNS_PASS>'
+      DDNS_UPDATE_URL: '<DDNS_UPDATE_URL>'
+      JOB_FREQUENCY: "15 minutes"
+      MONGO_URL: 'mongodb://ddns-mongo.local/agenda'
+    networks:
+      - ddns-net
+    depends_on:
+      - mongo
+
+networks:
+  ddns-net:
