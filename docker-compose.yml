@@ -5,6 +5,12 @@ services:
     image: mongo:latest
     container_name: ddns-mongo.local
     hostname: ddns-mongo.local
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
     networks:
       - ddns-net
 
@@ -12,13 +18,25 @@ services:
     image: cjww-development/ddns-update-scheduler
     container_name: ddns-update-scheduler.local
     hostname: ddns-update-scheduler.local
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
     environment:
-      LOOKUP_ADDR: '<SERVER>'
-      DDNS_USER: '<DDNS_USER>'
-      DDNS_PASS: '<DDNS_PASS>'
-      DDNS_UPDATE_URL: '<DDNS_UPDATE_URL>'
+      LOOKUP_ADDR: '<ADDRESS OF THE SERVER DDNS NEEDS TO BE UPDATED FOR>'
+      DDNS_USER: '<GOOGLE DOMAINS DDNS USERNAME>'
+      DDNS_PASS: '<GOOGLE DOMAINS DDNS PASSWORD>'
       JOB_FREQUENCY: "15 minutes"
       MONGO_URL: 'mongodb://ddns-mongo.local/agenda'
+      AWS_REGION: '<AWS REGION SENDING SMS MESSAGES>'
+      AWS_ACCESS_KEY_ID: '<ACCESS KEY FOR THE IAM USER>'
+      AWS_SECRET_ACCESS_KEY: '<SECRET KEY FOR THE IAM USER>'
+      SMS_DESTINATION: '<PHONE NUMBER TO SEND NOTIFICATIONS TO>'
+      SMS_ORIGINATOR: '<ORIGINATOR OF THE SMS MESSAGE>'
+      SMS_NOTIFICATIONS: 'true or false'
     networks:
       - ddns-net
     depends_on:
@@ -26,3 +44,4 @@ services:
 
 networks:
   ddns-net:
+    name: ddns-net

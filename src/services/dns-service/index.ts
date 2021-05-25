@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 CJWW Development
+ * Copyright 2021 CJWW Development
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 import { logger } from '../../lib/logger'
-import axios from 'axios'
+import axios, {AxiosResponse} from 'axios'
 import dns from 'dns'
 
 export const lookupUrl = (url: string, fn: (ip: string | null) => void) => {
@@ -30,13 +30,11 @@ export const lookupUrl = (url: string, fn: (ip: string | null) => void) => {
   })
 }
 
-export const updateDDNS = (ip: string): any => {
+export const updateDDNS = (ip: string): Promise<AxiosResponse> => {
   const user = process.env.DDNS_USER || ''
   const pass = process.env.DDNS_PASS || ''
-  const ddnsUrl = process.env.DDNS_UPDATE_URL || ''
   const serverUrl = process.env.LOOKUP_ADDR || ''
-  const url = `https://${user}:${pass}@${ddnsUrl}?hostname=${serverUrl}&myip=${ip}`
-  console.log(url)
+  const url = `https://${user}:${pass}@domains.google.com/nic/update?hostname=${serverUrl}&myip=${ip}`
   return axios.get(url).then(resp => {
     logger.info('[updateDDNS] - Sent update request to DDNS service')
     logger.info(resp.data)
