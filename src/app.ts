@@ -24,6 +24,7 @@ import {logger} from "./lib/logger";
 const SMS_DESTINATION = process.env.SMS_DESTINATION || ''
 
 const jobFrequency: string = process.env.JOB_FREQUENCY || '1 hour'
+const JOB_NAME = process.env.JOB_NAME || ''
 
 const initialMessage = "The DDNS updater service has just started or restarted. DDNS updates are in operation."
 if(process.env.SMS_NOTIFICATIONS == 'true') {
@@ -34,7 +35,7 @@ if(process.env.SMS_NOTIFICATIONS == 'true') {
 
 const startJobs = async () => {
   await agenda.start()
-  await agenda.every(jobFrequency, 'update-ddns')
+  await agenda.every(jobFrequency, JOB_NAME)
 }
 
 startJobs().then(r => console.log('Jobs Started'))

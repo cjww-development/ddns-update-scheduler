@@ -25,6 +25,8 @@ const serverUrl = process.env.LOOKUP_ADDR || ''
 
 const SMS_DESTINATION = process.env.SMS_DESTINATION || ''
 
+const JOB_NAME = process.env.JOB_NAME || ''
+
 export const agenda = new Agenda({ db: { address: mongoUrl }})
 
 const updateDDNSJob = async (job: Agenda.Job) => {
@@ -46,4 +48,4 @@ const updateDDNSJob = async (job: Agenda.Job) => {
   })
 }
 
-agenda.define('update-ddns', updateDDNSJob)
+agenda.define(JOB_NAME, updateDDNSJob)

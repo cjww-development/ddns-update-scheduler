@@ -23,6 +23,7 @@ Scheduling service to update Google's DDNS service with the current internet con
 | AWS_REGION            | AWS Region you will be sending SMS messages from                                             |
 | AWS_ACCESS_KEY_ID     | AWS access key for the IAM user sending SMS messages                                         |
 | AWS_SECRET_ACCESS_KEY | AWS secret key for the IAM user sending SMS messages                                         |
+| JOB_NAME              | Name of DDNS update job                                                                      |
                  
 These variables should be edited in the `docker-compose.yml` file.
          

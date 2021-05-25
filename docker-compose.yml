@@ -37,6 +37,7 @@ services:
       SMS_DESTINATION: '<PHONE NUMBER TO SEND NOTIFICATIONS TO>'
       SMS_ORIGINATOR: '<ORIGINATOR OF THE SMS MESSAGE>'
       SMS_NOTIFICATIONS: 'true or false'
+      JOB_NAME: '<NAME OF JOB>'
     networks:
       - ddns-net
     depends_on:
