@@ -87,6 +87,13 @@ Boot up mongo and ddns-update-scheduler with the compose file
 docker-compose up -d
 ```
 
+## Building with Jenkins
+This repositories build can be automated using Jenkins. The included Jenkinsfile can automate the build. The Jenkinsfile uses a docker build agent to package the builds dependencies. This agent need to be built prior to running. On the jenkins host build the agent image by running
+```shell
+cd jenkins-agent
+docker build --rm -t docker-in-docker-nodejs .
+```
+
 License
 =======
 This code is open sourced licensed under the Apache 2.0 License
