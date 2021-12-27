@@ -1,5 +1,10 @@
 pipeline {
-	agent any
+	agent {
+	    docker {
+	        image 'docker-in-docker-nodejs:latest'
+            args '-v /var/run/docker.sock:/var/run/docker.sock --user root'
+	    }
+	}
 	options {
 		ansiColor('xterm')
 	}
@@ -17,15 +22,14 @@ pipeline {
         stage('Run tests') {
             steps {
                 sh 'yarn test:ci'
-                sh 'python lcov_cobertura.py coverage/lcov.info --base-dir src/ --output coverage/coverage.xml'
+                sh 'python3 lcov_cobertura.py coverage/lcov.info --base-dir src/ --output coverage/coverage.xml'
             }
         }
         stage('Build docker image') {
             steps {
-                sh 'docker build -t cjww-development/ddns-update-scheduler .'
+                sh 'docker build --rm -t cjww-development/ddns-update-scheduler .'
             }
         }
-
 	}
 	post {
 		always {

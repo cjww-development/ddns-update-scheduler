@@ -20,7 +20,7 @@ const { lookupUrl } = require('../../src/services/dns-service')
 describe('lookupUrl', () => {
   it('should return the IP for the url', async () => {
     lookupUrl('test.com', (ip: string | null) => {
-      expect(ip).toEqual('69.172.200.235')
+      expect(ip).toEqual('67.225.146.248')
     })
   })
 })
