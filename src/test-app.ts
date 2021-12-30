@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-import winston from 'winston'
+import dotenv from 'dotenv'
+import { buildUrlDetails } from "./lib/parser";
+import { updateDDNSEntries } from './orchestrator'
 
-const consoleTransport = new winston.transports.Console()
-const winstonConfig = {
-  transports: [consoleTransport]
-}
+dotenv.config()
 
-export const logger: winston.Logger = winston.createLogger(winstonConfig)
+const smsDestination: string = process.env.SMS_DESTINATION || ''
+const servers: string = process.env.SERVER_SETTINGS || ''
+const initialMessage: string = process.env.INITIAL_MESSAGE || ''
+
+const urlDetails = buildUrlDetails(servers)
+updateDDNSEntries(urlDetails, smsDestination)

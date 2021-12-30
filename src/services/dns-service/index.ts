@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 CJWW Development
+ * Copyright 2022 CJWW Development
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,31 +14,34 @@
  * limitations under the License.
  */
 
-import { logger } from '../../lib/logger'
-import axios, {AxiosResponse} from 'axios'
+import {logger} from '../../lib/logger'
+import axios from 'axios'
 import dns from 'dns'
 
-export const lookupUrl = (url: string, fn: (ip: string | null) => void) => {
-  logger.info(`[lookupUrl] - Looking up IP address for ${url}`)
-  dns.lookup(url, (err: NodeJS.ErrnoException | null, addresses: string, family: number) => {
-    if(!!err) {
-      logger.error(`[lookupUrl] - There was a problem looking up the url for ${url}`, err)
-      return fn(null)
-    }
-    logger.info(`[lookupUrl] - Completed lookup of IP address for ${url}, found ${addresses}`)
-    return fn(addresses)
+export interface IpResponse {
+  url: string,
+  ip: string
+  family: number
+}
+
+export const lookupARecord = (url: string): Promise<IpResponse> => {
+  return new Promise((resolve, reject) => {
+    dns.lookup(url, (err: NodeJS.ErrnoException | null, addresses: string, family: number) => {
+      if(!!err) {
+        logger.error(`[lookupUrl] - There was a problem performing the dns lookup`)
+        return reject(err)
+      } else {
+        logger.info(`[lookupUrl] - Completed lookup of IP address for ${url}, found ${addresses}`)
+        return resolve({ url, ip: addresses, family })
+      }
+    })
   })
 }
 
-export const updateDDNS = (ip: string): Promise<AxiosResponse> => {
-  const user = process.env.DDNS_USER || ''
-  const pass = process.env.DDNS_PASS || ''
-  const serverUrl = process.env.LOOKUP_ADDR || ''
-  const url = `https://${user}:${pass}@domains.google.com/nic/update?hostname=${serverUrl}&myip=${ip}`
-  return axios.get(url).then(resp => {
-    logger.info('[updateDDNS] - Sent update request to DDNS service')
-    logger.info(resp.data)
-    return resp.data
+export const updateGoogleDDNS = (ip: string, url: string, username: string, password: string): Promise<number> => {
+  const updateUrl = `https://${username}:${password}@domains.google.com/nic/update?hostname=${url}&myip=${ip}`
+  return axios.get(updateUrl).then(resp => {
+    logger.info('[updateDDNS] - Sent update request to the Google DDNS service')
+    return resp.status
   })
 }
-

@@ -14,11 +14,23 @@
  * limitations under the License.
  */
 
-import winston from 'winston'
+import { UrlDetails } from '../orchestrator'
 
-const consoleTransport = new winston.transports.Console()
-const winstonConfig = {
-  transports: [consoleTransport]
+export const isUrlDetails = (arg: any[]): arg is UrlDetails[] => {
+  return arg.map(obj => {
+    return obj
+      && obj.url && typeof(obj.url) == 'string'
+      && obj.credentials.username && typeof(obj.credentials.username) == 'string'
+      && obj.credentials.password && typeof(obj.credentials.password) == 'string'
+  }).every(bool => bool === true)
 }
 
-export const logger: winston.Logger = winston.createLogger(winstonConfig)
+export const buildUrlDetails = (envValue: string): UrlDetails[] => {
+  try {
+    const jsonObj = JSON.parse(envValue)
+    isUrlDetails(jsonObj)
+    return jsonObj
+  } catch {
+    return []
+  }
+}

@@ -11,19 +11,18 @@ Scheduling service to update Google's DDNS service with the current internet con
 - Mongo
 
 ## Environment variables
-| Variable              | Description                                                                                  |
-| --------------------- | -------------------------------------------------------------------------------------------- |
-| LOOKUP_ADDR           | What address you want to find the IP Address for and update                                  |
-| DDNS_USER             | Username Google Domains provides to let you update a DDNS record                             |
-| DDNS_PASS             | Password Google Domains provides to let you update a DDNS record                             |
-| JOB_FREQUENCY         | How often a check and update should (Set at 15 mins in the docker compose)                   |
-| SMS_NOTIFICATIONS     | Should SMS Updates be sent? true/false (variables below this can be omitted if this is true) |
-| SMS_DESTINATION       | What phone number to send SMS update to (only tested with UK phone number so far)            |
-| SMS_ORIGINATOR        | Where the SMS update says it comes from                                                      |
-| AWS_REGION            | AWS Region you will be sending SMS messages from                                             |
-| AWS_ACCESS_KEY_ID     | AWS access key for the IAM user sending SMS messages                                         |
-| AWS_SECRET_ACCESS_KEY | AWS secret key for the IAM user sending SMS messages                                         |
-| JOB_NAME              | Name of DDNS update job                                                                      |
+| Variable              | Description                                                                                                                                                            |
+|-----------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| AWS_REGION            | AWS Region you will be sending SMS messages from                                                                                                                       |
+| AWS_ACCESS_KEY_ID     | AWS access key for the IAM user sending SMS messages                                                                                                                   |
+| AWS_SECRET_ACCESS_KEY | AWS secret key for the IAM user sending SMS messages                                                                                                                   |
+| JOB_NAME              | Name of DDNS update job                                                                                                                                                |
+| JOB_FREQUENCY         | How often a check and update should (Set at 15 mins in the docker compose)                                                                                             |
+| MONGO_URL             | The url for MongoDB where agenda is managed. Format is `mongodb://<MONGO HOST>/agenda`                                                                                 |
+| SERVER_SETTINGS       | The urls and required credentials for updating its DDNS entry. Should be in the format `[ { url: string, credentials: { username: string, password: string } }, ... ]` |
+| SMS_NOTIFICATIONS     | Should SMS Updates be sent? true/false (variables below this can be omitted if this is true)                                                                           |
+| SMS_DESTINATION       | What phone number to send SMS update to (only tested with UK phone number so far)                                                                                      |
+| SMS_ORIGINATOR        | Where the SMS update says it comes from                                                                                                                                |
                  
 These variables should be edited in the `docker-compose.yml` file.
          

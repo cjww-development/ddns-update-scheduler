@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 CJWW Development
+ * Copyright 2022 CJWW Development
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,13 @@
 import axios from 'axios'
 import { logger } from '../../lib/logger'
 
-export const getPublicIP = (): Promise<string | null> => {
+export const getPublicIP = (): Promise<string> => {
   return axios.get('https://api.ipify.org?format=json').then(resp => {
     logger.info(`[getPublicIp] - Fetched public IP address for the current connection, found ${resp.data.ip}`)
     return resp.data.ip
   }).catch(err => {
-    logger.error('[getPublicIp] - There was a problem getting the public IP address', err)
-    return null
+    logger.error('[getPublicIp] - There was a problem getting the public IP address')
+    throw err
   })
 }
 

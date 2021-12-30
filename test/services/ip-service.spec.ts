@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 CJWW Development
+ * Copyright 2022 CJWW Development
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,15 +22,25 @@ jest.mock('axios')
 describe('getPublicIP', () => {
   it('should return the public IP for the current connection', async () => {
     const mockedData = { data: { ip: '127.0.0.1' } }
-    axios.get.mockImplementationOnce(() => Promise.resolve(mockedData));
+    axios.get.mockImplementationOnce(() => Promise.resolve(mockedData))
 
-    await expect(getPublicIP()).resolves.toEqual('127.0.0.1');
+    const result = await getPublicIP()
+
+    expect(result).toEqual('127.0.0.1')
   })
 
-  it('should return null', async () => {
-    const mockedData = { data: { ip: '127.0.0.1' } }
-    axios.get.mockImplementationOnce(() => Promise.reject(mockedData));
+  it('should return an err is there was a problem getting the public IP', async () => {
+    const mockedData = new Error()
+    axios.get.mockImplementationOnce(() => Promise.reject(mockedData))
+    let thrownError;
 
-    await expect(getPublicIP()).resolves.toEqual(null);
+    try {
+      await getPublicIP()
+    }
+    catch(error) {
+      thrownError = error;
+    }
+
+    expect(thrownError).toEqual(mockedData)
   })
 })
